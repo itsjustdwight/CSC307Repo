@@ -1,0 +1,22 @@
+{
+  "name": "npminit",
+  "version": "1.0.0",
+  "description": "n/a",
+  "main": "RETURN",
+  "scripts": {
+    "test": "RETURN"
+  },
+  "repository": {
+    "type": "git",
+    "url": "RETURN"
+  },
+  "keywords": [
+    "RETURN"
+  ],
+  "author": "",
+  "license": "ISC"
+  ,
+  "workspaces": [
+      "packages/*"
+  ]
+}
