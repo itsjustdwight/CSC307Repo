@@ -4,7 +4,8 @@
   "description": "n/a",
   "main": "RETURN",
   "scripts": {
-    "test": "RETURN"
+    "test": "RETURN",
+    "start": "npm run -w react-frontend dev"
   },
   "repository": {
     "type": "git",
