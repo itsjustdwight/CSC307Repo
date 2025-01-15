@@ -1,4 +1,4 @@
-//src/MyApp.jsx
+// src/MyApp.jsx
 
 import React, { useState } from "react";
 import Table from "./Table";
