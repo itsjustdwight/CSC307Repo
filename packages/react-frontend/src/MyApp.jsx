@@ -14,13 +14,17 @@ function MyApp() {
     setCharacters(updated);
   }
 
+  function updateList(person) {
+    setCharacters([...characters, person]); // '...' -> ES6 spread operator
+  }
+
   return (
    <div className ="container">
     <Table 
       characterData={characters}
       removeCharacter={removeOneCharacter} 
     />
-    <Form />
+    <Form handleSubmit={updateList} />
    </div>
   );
 }
