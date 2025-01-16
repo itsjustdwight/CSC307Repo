@@ -1,0 +1,15 @@
+{
+  "name": "express-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dwight Taylor Jr",
+  "license": "ISC",
+  "description": "This is the package for the backend of my react app",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
