@@ -11,5 +11,8 @@
   "description": "This is the package for the backend of my react app",
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
