@@ -38,6 +38,12 @@ const users = {
     ]
 };
 
+const findUserByName = (name) => {
+    return users["users_list"].filter(
+        (user) => user["name"] === name
+    );
+};
+
 // adding middleware to be used to process incoming HTTP requests in JSON format
 app.use(express.json());
 
@@ -47,7 +53,14 @@ app.use(express.json());
 // when request is made to root URL (http://localhost:8000/), server responds with message
 // using "/users" makes the new URL -> http://localhost:8000/users, accessing the users variable
 app.get("/users", (req, res) => { 
-    res.send(users);
+    const name = req.query.name; // initializing name variable to access specific names from HTTP query using request
+    if (name != undefined) {
+        let result = findUserByName(name);
+        result = { users_list: result };
+        res.send(result);
+    } else {
+        res.send(users);
+    }
 });
 
 // starting server on specified port
@@ -55,6 +68,6 @@ app.get("/users", (req, res) => {
 // confirmation message (console.log()) send to console to indicate server is listening
 app.listen(port, () => {
     console.log(
-        `Example app listening at http://localhost:${port}/users`
+        `Example app listening at http://localhost:${port}/users?name=Mac`
     );
 });
