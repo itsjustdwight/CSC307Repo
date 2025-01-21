@@ -48,7 +48,13 @@ const findUserByJob = (job) => {
     return users["users_list"].filter(
        (user) => user["job"] === job
     );
-}
+};
+
+const findUserByNameAndJob = (name, job) => {
+    return users["users_list"].filter(
+        (user) => user["name"] === name && user["job"] === job
+    );
+};
 
 const findUserById = (id) => 
     users["users_list"].find((user) => user["id"] === id);
@@ -100,12 +106,17 @@ app.get("/users/:id", (req, res) => {
 app.get("/users/:name/:job", (req, res) => {
     const name = req.params.name;
     const job = req.params.job;
-    if (name != undefined) {
+    if (name && job) {
+        let result = findUserByNameAndJob(name, job);
+        result = { users_list: result }
+        res.send(result)
+    }
+    else if (name != undefined) {
         let result = findUserByName(name);
         result = { users_list: result };
         res.send(result);
     }
-    if (job != undefined) {
+    else if (job != undefined) {
         let result = findUserByJob(job);
         result = { users_list: result };
         res.send(result)
