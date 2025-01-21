@@ -44,8 +44,28 @@ const findUserByName = (name) => {
     );
 };
 
+const findUserByJob = (job) => {
+    return users["users_list"].filter(
+       (user) => user["job"] === job
+    );
+}
+
 const findUserById = (id) => 
     users["users_list"].find((user) => user["id"] === id);
+
+// creating variable that takes a user object and adds it to users_list array
+const addUser = (user) => {
+    users["users_list"].push(user); // adding new user to end of users_list array
+    return user;
+}
+
+// creating variable that deletes user object specified by id
+// uses filter function to separate elements in users_list by id 
+const deleteUser = (id) => {
+    users["users_list"] = users["users_list"].filter(
+       (user) => user["id"] !== id);
+    return users["users_list"];
+}
 
 // adding middleware to be used to process incoming HTTP requests in JSON format
 app.use(express.json());
@@ -55,8 +75,18 @@ app.use(express.json());
 // (req, res) is the callback function with a request then a response
 // when request is made to root URL (http://localhost:8000/), server responds with message
 // using "/users" makes the new URL -> http://localhost:8000/users, accessing the users variable
+app.get("/users", (req, res) => {
+    const name = req.query.name; // initializing name variable to access specific names from HTTP query using request
+    if(name != undefined) {
+        let result = findUserByName(name);
+        result = { users_list: result };
+        res.send(result);
+    } else {
+        res.send(users)
+    }
+})
+
 app.get("/users/:id", (req, res) => { 
-    // const name = req.query.name; // initializing name variable to access specific names from HTTP query using request
     const id = req.params["id"];
     let result = findUserById(id);
     if (result === undefined) {
@@ -66,11 +96,43 @@ app.get("/users/:id", (req, res) => {
     }
 });
 
+// getting all users that match given name and job
+app.get("/users/:name/:job", (req, res) => {
+    const name = req.params.name;
+    const job = req.params.job;
+    if (name != undefined) {
+        let result = findUserByName(name);
+        result = { users_list: result };
+        res.send(result);
+    }
+    if (job != undefined) {
+        let result = findUserByJob(job);
+        result = { users_list: result };
+        res.send(result)
+    } else {
+        res.send(users);
+    }
+})
+
 // starting server on specified port
 // listening (from the backend) to the incoming http requests on the port
 // confirmation message (console.log()) send to console to indicate server is listening
 app.listen(port, () => {
     console.log(
-        `Example app listening at http://localhost:${port}/users/zap555`
+        `Example app listening at http://localhost:${port}/users`
     );
 });
+
+// function to handle the POST http request
+app.post("/users", (req, res) => {
+    const userToAdd = req.body; // access the incoming data of users_list
+    addUser(userToAdd);
+    res.send();
+})
+
+// function to handle the DELETE http request
+app.delete("/users/:id", (req, res) => {
+    const userToDelete = req.params.id;
+    deleteUser(userToDelete);
+    res.send();
+})
