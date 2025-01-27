@@ -1,6 +1,7 @@
 // backend.js
 // creating express framework, creating a web server, and manging http requests and responses
 import express from "express"
+import cors from "cors";
 
 // creating an instance of Express application (used for routes, middleware, and server behavior)
 const app = express();
@@ -35,6 +36,11 @@ const users = {
             name: "Dennis",
             job: "Bartender"
         },
+        {
+            id: "dat110",
+            name: "Dwight",
+            job: "Student"
+        }
     ]
 };
 
@@ -72,6 +78,9 @@ const deleteUser = (id) => {
        (user) => user["id"] !== id);
     return users["users_list"];
 }
+
+// enabling all CORS requests
+app.use(cors());
 
 // adding middleware to be used to process incoming HTTP requests in JSON format
 app.use(express.json());
