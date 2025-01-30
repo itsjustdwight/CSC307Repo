@@ -21,9 +21,25 @@ function MyApp() {
   // with updates -> table only updates if POST request is successful
   function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person])) // '...' -> ES6 spread operator
+      .then((res) => {
+        console.log("Response Status:", res.status)
+        if (res.status === 201) {
+          // parsing response to get user
+          return res.json();
+        } else {
+          // unexpected status codes
+        }
+      })
+      .then((data) =>  {
+        console.log("Parsed Response Data:", data)
+        if (data && data.user) {
+          setCharacters([...characters, data.user]); // '...' -> ES6 spread operator
+        } else {
+          console.error("The 'user' property is missing in the response:", data)
+        }
+      }) 
       .catch((error) => {
-        console.log(error);
+        console.error("Couldn't add user:", error);
       });
   }
 

@@ -36,11 +36,6 @@ const users = {
             name: "Dennis",
             job: "Bartender"
         },
-        {
-            id: "dat110",
-            name: "Dwight",
-            job: "Student"
-        }
     ]
 };
 
@@ -79,6 +74,27 @@ const deleteUser = (id) => {
     return users["users_list"];
 }
 
+// generating random ID for newly created user form client
+const randomGeneratedID = () => {
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    let id = '';
+
+    // generating three random letters
+    for(let i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * letters.length);
+        id += letters[randomIndex];
+    }
+
+    // generating random numbers
+    for(let i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * numbers.length);
+        id += numbers[randomIndex];
+    }
+
+    return id;
+}; 
+
 // enabling all CORS requests
 app.use(cors());
 
@@ -102,7 +118,7 @@ app.get("/users", (req, res) => {
 })
 
 app.get("/users/:id", (req, res) => { 
-    const id = req.params["id"];
+    const id = req.params.id;
     let result = findUserById(id);
     if (result === undefined) {
         res.status(404).send("Resource not found.");
@@ -146,9 +162,31 @@ app.listen(port, () => {
 // function to handle the POST http request
 app.post("/users", (req, res) => {
     const userToAdd = req.body; // access the incoming data of users_list
-    addUser(userToAdd);
-    res.send();
-})
+
+    if (!userToAdd.name || !userToAdd.job) {
+        console.log("Name and Job!!!!!")
+        return res.status(400).json({ 
+            message: "Name and Job are needed!" 
+        })
+    }
+
+    // done before adding new user to users_list
+    // id -> randomly generated
+    const newUser = {
+        id: randomGeneratedID(),
+        name: userToAdd.name,
+        job: userToAdd.job
+    }
+
+    users["users_list"].push(newUser);
+    // .json() used instead of .send() to ensure the response is corretly
+    // (cont.) formatted as JSON, where frontend parses w/o issues
+    res.status(201).json({ 
+        message: "Successful POST, User created", 
+        user: newUser 
+    })
+    console.log("Successfully created User:", newUser)
+});
 
 // function to handle the DELETE http request
 app.delete("/users/:id", (req, res) => {
