@@ -7,11 +7,20 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]); // empty state
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    setCharacters(updated);
+  function removeOneCharacter(id) {
+    deleteUser(id)
+      .then((res) => {
+        if (res.status === 204) {
+          setCharacters(characters.filter((character) => character.id !== id));
+        } else if (res.status === 404) {
+          console.error("User not found!");
+        } else {
+          console.error("Failed to delete desired user!")
+        }
+      })
+      .catch((error) => {
+        console.error("Unable to delete user:", error);
+      })
   }
 
   // function updateList(person) {
@@ -22,20 +31,18 @@ function MyApp() {
   function updateList(person) {
     postUser(person)
       .then((res) => {
-        console.log("Response Status:", res.status)
         if (res.status === 201) {
           // parsing response to get user
           return res.json();
         } else {
-          // unexpected status codes
+          throw new Error("Unusual Error!")
         }
       })
       .then((data) =>  {
-        console.log("Parsed Response Data:", data)
         if (data && data.user) {
           setCharacters([...characters, data.user]); // '...' -> ES6 spread operator
         } else {
-          console.error("The 'user' property is missing in the response:", data)
+          throw new Error("Invalid data format from server")
         }
       }) 
       .catch((error) => {
@@ -69,6 +76,18 @@ function MyApp() {
     });
 
   return promise;
+  }
+
+  // fucntion to make DELETE requests, deleting a user from the backend
+  function deleteUser(id) {
+    const promise = fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+
+    return promise;
   }
 
   // functional component to call fetchUsers()

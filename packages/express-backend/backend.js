@@ -191,6 +191,13 @@ app.post("/users", (req, res) => {
 // function to handle the DELETE http request
 app.delete("/users/:id", (req, res) => {
     const userToDelete = req.params.id;
+    const doesUserExist = findUserById(userToDelete);
+
+    if (!doesUserExist) {
+        return res.status(404).json({ message: "User doesn't exist to delete." });
+    }
+
     deleteUser(userToDelete);
-    res.send();
+    console.log(`User ${userToDelete} successfully deleted`)
+    res.status(204).send();
 })
