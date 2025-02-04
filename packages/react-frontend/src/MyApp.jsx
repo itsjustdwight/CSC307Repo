@@ -35,6 +35,7 @@ function MyApp() {
           // parsing response to get user
           return res.json();
         } else {
+          // error handling
           throw new Error("Unusual Error!")
         }
       })
@@ -42,6 +43,7 @@ function MyApp() {
         if (data && data.user) {
           setCharacters([...characters, data.user]); // '...' -> ES6 spread operator
         } else {
+          // error handling
           throw new Error("Invalid data format from server")
         }
       }) 
