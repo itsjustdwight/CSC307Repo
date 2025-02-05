@@ -135,7 +135,7 @@ app.get("/users/:id", (req, res) => {
     findUserById(id)
     .then((obtainedUser) => {
         if(!obtainedUser) {
-            res.status(404).send("User not found!");
+            return res.status(404).send("User not found!");
         } 
         res.send(obtainedUser);
     })
@@ -197,7 +197,7 @@ app.post("/users", (req, res) => {
     // done before adding new user to users_list
     // id -> randomly generated
     const newUser = {
-        _id: randomGeneratedID(),
+        // _id: randomGeneratedID(),
         name: userToAdd.name,
         job: userToAdd.job
     }
@@ -219,7 +219,7 @@ app.post("/users", (req, res) => {
 
 // function to handle the DELETE http request
 app.delete("/users/:id", (req, res) => {
-    const userToDelete = req.params._id;
+    const userToDelete = req.params.id;
     deleteUser(userToDelete)
     .then((deletedUser) => {
         if (!deletedUser) {

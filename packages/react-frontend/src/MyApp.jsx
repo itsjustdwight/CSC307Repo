@@ -11,7 +11,7 @@ function MyApp() {
     deleteUser(id)
       .then((res) => {
         if (res.status === 204) {
-          setCharacters(characters.filter((character) => character.id !== id));
+          setCharacters(characters.filter((character) => character._id !== id));
         } else if (res.status === 404) {
           console.error("User not found!");
         } else {
